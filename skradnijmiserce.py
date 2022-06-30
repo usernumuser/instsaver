@@ -33,40 +33,50 @@ def init():
             driver.add_cookie(cipek)
 
 
-def get_post_path():
-    pass
-
-def get_first_post():
+def get_posts_data():
     driver.get("https://www.instagram.com/official_kacler2003")
     time.sleep(5)
     #tu się będzie odbywała magia i czary i wgl ten kurwa no przeczttaj co tu się dzieje po prostu XDD
     driver.find_element(By.CSS_SELECTOR, 'div[class="_aabd _aa8k _aanf"]').click()
     time.sleep(5)
-    #div[class="_aagu"]
-    do_opierdolenia = BeautifulSoup(driver.find_element(By.CSS_SELECTOR, 'ul[class="_acay"]').get_attribute('innerHTML'), 'html.parser').find("img")["src"]
-    """
-    print(do_opierdolenia)
-    lol = open("cipeczka.txt", "w", encoding="utf-8")
-    lol.write(do_opierdolenia)
-    """
-    time.sleep(3)
-    driver.get(do_opierdolenia)
-    time.sleep(3)
-    driver.save_screenshot("screenshot.png")
+    while True:
+        #checks if this is a multipost and loads all images/videos
+        while True:
+            try:
+                driver.find_element(By.CSS_SELECTOR, 'button[class=" _aahi"').click()
+            except:
+                time.sleep(0.5)
+                break
+        while True:
+            try:
+                post = BeautifulSoup(driver.find_element(By.CSS_SELECTOR, 'article[role="presentation"]').get_attribute('innerHTML'), 'html.parser')
+                zdjecia = post.find_all("img")
+                filmy = post.find_all("video")
+                if zdjecia or filmy:
+                    break
+                else:
+                    continue
+            except:
+                time.sleep(0.2)
+                continue
+            break
+
+
+
+        print(filmy)
+        lol = open("cipeczka.txt", "w", encoding="utf-8")
+        lol.write(str(zdjecia))
+
+        try:
+            driver.find_element(By.CSS_SELECTOR, 'div[class=" _aaqg _aaqh"]').click()
+        except:
+            print("no more posts!")
+            break
+        time.sleep(2)
+
+
 
 
 
 init()
-get_first_post()
-
-while True:
-    pass
-
-
-
-
-"""
-kod guzika który przełącza mioędzy postami
-<button class="_abl-" type="button"><div class="_abm0"><span style="display: inline-block; transform: rotate(90deg);"><svg aria-label="Dalej" class="_ab6-" color="#000000" fill="#000000" height="16" role="img" viewBox="0 0 24 24" width="16"><path d="M21 17.502a.997.997 0 01-.707-.293L12 8.913l-8.293 8.296a1 1 0 11-1.414-1.414l9-9.004a1.03 1.03 0 011.414 0l9 9.004A1 1 0 0121 17.502z"></path></svg></span></div></button>
-
-"""
+get_posts_data()
